@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"encoding/csv"
-	L "./lib"
+	//"./lib/lib.go"
 	"github.com/jung-kurt/gofpdf"
 )
 
@@ -38,11 +38,14 @@ type TimeEntry struct {
 }
 
 func main(){
-	var fname string
-	if len(os.Args)<2{
-		fname = "./example.csv"
-	} else{
+	fname := "./example.csv"
+	outFile := "./out.pdf"
+
+	if len(os.Args)>1{
 		fname = os.Args[1]
+		if len(os.Args)>2{
+			outFile = os.Args[2]
+		}
 	}
 
 	fmt.Println("reading", fname)
@@ -84,11 +87,11 @@ func main(){
 	var timeCounter float64
 	for _, e := range r {
 		htmlStr := ""
-		htmlStr = L.Join(htmlStr, e.Date, spaces)
-		htmlStr = L.Join( htmlStr, e.In, spaces)
-		htmlStr = L.Join(htmlStr,e.Out, spaces)
-		htmlStr = L.Join( htmlStr, e.Hm,spaces)
-		htmlStr = L.Join(htmlStr, e.Time, spaces)
+		htmlStr = Join(htmlStr, e.Date, spaces)
+		htmlStr = Join( htmlStr, e.In, spaces)
+		htmlStr = Join(htmlStr,e.Out, spaces)
+		htmlStr = Join( htmlStr, e.Hm,spaces)
+		htmlStr = Join(htmlStr, e.Time, spaces)
 		//htmlStr = L.Join(htmlStr, e.Comment,spaces)
 		pdf.Write(lineHt, htmlStr)
 		pdf.Ln(7)
@@ -101,12 +104,13 @@ func main(){
 		//fmt.Println(timeValue)
 	}
 	//fmt.Println(r)
-	timeInfo := L.Join("time: ", strconv.FormatFloat(timeCounter, 'f', 6, 64))
+	timeInfo := Join("time: ", strconv.FormatFloat(timeCounter, 'f', 6, 64))
 	pdf.Write(lineHt, timeInfo)
 	pdf.Ln(20)
 	pdf.Write(lineHt, "		_____________")
 
-	perr := pdf.OutputFileAndClose("out.pdf")
+	fmt.Println("writing",outFile)
+	perr := pdf.OutputFileAndClose(outFile)
 	if perr != nil{
 		fmt.Println(perr)
 	}

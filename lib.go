@@ -1,4 +1,4 @@
-package lib
+package main
 
 import (
 	"os"
@@ -128,9 +128,9 @@ func GetLastLineOfFile(fname string) string {
 	ll := l[len(l)-2]
 	return ll
 }
-
+/*
 func main() {
 	if err := oops(); err != nil {
 		fmt.Println(err)
 	}
-}
+}*/
